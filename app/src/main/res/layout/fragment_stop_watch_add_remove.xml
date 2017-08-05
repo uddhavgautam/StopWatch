@@ -1,0 +1,32 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stopWatchAddRemoveFrag"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.uddhav.stopwatch.View.Fragment.StopWatchAddRemoveFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <Button
+        android:id="@+id/addBtnSWAR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:text="Add" />
+
+    <Button
+        android:id="@+id/removeBtnSWAR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:text="Remove"
+        android:visibility="visible" />
+
+    <Spinner
+        android:id="@+id/spinnerSWAR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:entries="@array/choice_entries" />
+
+</FrameLayout>
