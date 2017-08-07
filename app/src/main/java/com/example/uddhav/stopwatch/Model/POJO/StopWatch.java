@@ -5,22 +5,30 @@ package com.example.uddhav.stopwatch.Model.POJO;
  */
 
 public class StopWatch {
-    private Long value;
-    private String unit;
+    private long totalTime;
+    private String user;
 
-    public Long getValue() {
-        return value;
+    public StopWatch(long totalTime, String user) {
+        this.totalTime = totalTime;
+        this.user = user;
     }
 
-    public void setValue(Long value) {
-        this.value = value;
+    public StopWatch() {
     }
 
-    public String getUnit() {
-        return unit;
+    public String getUser() {
+        return user;
     }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public long getTotalTime() {
+        return totalTime;
+    }
+
+    public void setTotalTime(long totalTime) {
+        this.totalTime = totalTime;
     }
 }

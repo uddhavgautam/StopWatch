@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             transaction.replace(R.id.stopWatchAdderRemoverLayoutFrag, stopWatchAddFragment);
 
             StopWatchFragment stopWatchFragment = new StopWatchFragment();
-            transaction.replace(R.id.stopWatchFrag, stopWatchAddFragment);
+            transaction.replace(R.id.stopWatchLayoutFrag, stopWatchFragment);
 
             StopWatchHistoryFragment stopWatchHistoryFragment = new StopWatchHistoryFragment();
             transaction.replace(R.id.stopWatchHistoryLayoutFrag, stopWatchHistoryFragment);

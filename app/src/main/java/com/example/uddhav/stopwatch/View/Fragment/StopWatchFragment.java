@@ -1,15 +1,14 @@
 package com.example.uddhav.stopwatch.View.Fragment;
 
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.uddhav.stopwatch.Controller.RecyclerViewAdapter.StopWatchAdapter;
 import com.example.uddhav.stopwatch.Model.POJO.StopWatch;
@@ -21,12 +20,11 @@ import java.util.List;
 
 public class StopWatchFragment extends Fragment {
     private static final String TAG = "StopWatchFragment";
-    public static StopWatchAdapter mAdapter;
+    public static StopWatchAdapter stopWatchAdapter;
     public static Context stopWatchContext;
-    protected RecyclerView stopWatchRecyclerView;
+    public static RecyclerView stopWatchRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
     private List<StopWatch> stopWatchList;
-    private Button okBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,7 +36,7 @@ public class StopWatchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_stop_watch, container, false); //recycler_view_frag1 is a fragment
+        View rootView = inflater.inflate(R.layout.fragment_stop_watch, container, false);
         rootView.setTag(TAG);
 
         stopWatchContext = getActivity().getApplicationContext(); //set the context
@@ -47,8 +45,8 @@ public class StopWatchFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         stopWatchRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new StopWatchAdapter(stopWatchList, stopWatchContext);
-        stopWatchRecyclerView.setAdapter(mAdapter); //now Adapter's activity starts
+        stopWatchAdapter = new StopWatchAdapter(stopWatchList, stopWatchContext);
+        stopWatchRecyclerView.setAdapter(stopWatchAdapter); //adapter modified, when later I call this adapter, it would be neighbor of stopWatchRecylerView
 
 
         return rootView;
@@ -57,7 +55,6 @@ public class StopWatchFragment extends Fragment {
     @Override
     public void onStart() { //onStart comes after onCreateView() callback
         super.onStart();
-
     }
 
     @Override
