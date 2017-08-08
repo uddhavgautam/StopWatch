@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.uddhav.stopwatch.Model.POJO.StopWatch;
 import com.example.uddhav.stopwatch.R;
+import com.example.uddhav.stopwatch.View.Fragment.StopWatchAddRemoveFragment;
 
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +56,7 @@ public class StopWatchAdapter extends RecyclerView.Adapter<StopWatchAdapter.Stop
     public void onBindViewHolder(StopWatchViewHolder holder, int position, List<Object> payloads) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads);
-            holder.updateUserName();
+            holder.updateUserNameAndValue();
         } else {
             for (Object payload : payloads) {
                 if (payload instanceof Long) {
@@ -62,7 +64,6 @@ public class StopWatchAdapter extends RecyclerView.Adapter<StopWatchAdapter.Stop
                 } else {
                     // do nothing
                 }
-
             }
         }
     }
@@ -103,6 +104,11 @@ public class StopWatchAdapter extends RecyclerView.Adapter<StopWatchAdapter.Stop
         notifyItemRemoved(position);
     }
 
+    public void remove() {
+        stopWatchList.remove(0);
+        notifyItemRemoved(0);
+    }
+
     @Override
     public int getItemCount() {
         return stopWatchList.size();
@@ -117,6 +123,7 @@ public class StopWatchAdapter extends RecyclerView.Adapter<StopWatchAdapter.Stop
     public static class StopWatchViewHolder extends RecyclerView.ViewHolder { //can be as separate class
         public static TextView dataTextView;
         public static TextView userTextView;
+        public static ToggleButton toggleButton;
         private StopWatch stopWatch = new StopWatch();
 
 
@@ -124,6 +131,7 @@ public class StopWatchAdapter extends RecyclerView.Adapter<StopWatchAdapter.Stop
             super(v);
             dataTextView = v.findViewById(R.id.dataTextView);
             userTextView = v.findViewById(R.id.userTextView);
+            toggleButton = v.findViewById(R.id.toggleButton);
 
             dataTextView.setFocusable(false);
             dataTextView.setClickable(false);
@@ -131,15 +139,35 @@ public class StopWatchAdapter extends RecyclerView.Adapter<StopWatchAdapter.Stop
             userTextView.setFocusable(false);
             userTextView.setClickable(false);
 
+            toggleButton.setChecked(false);
+
+            toggleButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (toggleButton.isChecked()) {
+                        //start CountDownTimer
+                        StopWatchAddRemoveFragment.countDownTimer.start();
+
+                    } else {
+                        // pause CountDownTimer
+                        StopWatchAddRemoveFragment.countDownTimer.cancel();
+                    }
+                }
+            });
+
         }
 
         public void bindPayload(Long payload) {
             dataTextView.setText("   " + payload + "");
+
         }
 
-        public void updateUserName() {
+        public void updateUserNameAndValue() {
             int lastValue = stopWatchList.size() - 1;
             userTextView.setText("   " + stopWatchList.get(lastValue).getUser() + "");
+            dataTextView.setText("   " + stopWatchList.get(lastValue).getTotalTime() + "");
+            toggleButton.setChecked(true);
+
         }
     }
 

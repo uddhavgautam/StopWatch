@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rowStopWatchHistoryRecyclerView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    android:background="?android:attr/textColorHighlightInverse"
+    android:orientation="horizontal"
+    android:visibility="visible">
 
 
     <TextView
         android:id="@+id/historyTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="countDownTimer" />
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="@string/countdowntimer"
+        tools:ignore="Suspicious0dp" />
 
 
 </LinearLayout>

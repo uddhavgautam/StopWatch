@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.uddhav.stopwatch.Controller.RecyclerViewAdapter.StopWatchHistoryAdapter;
+import com.example.uddhav.stopwatch.Controller.Utilities.MySQLiteHelper;
+import com.example.uddhav.stopwatch.Model.POJO.StopWatch;
 import com.example.uddhav.stopwatch.Model.POJO.StopWatchHistory;
 import com.example.uddhav.stopwatch.R;
 
@@ -28,12 +30,6 @@ public class StopWatchHistoryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         stopWatchHistoryList = new ArrayList<>();
-        stopWatchHistoryList = initDataset();
-    }
-
-    private List<StopWatchHistory> initDataset() {
-        stopWatchHistoryList.add(new StopWatchHistory("user1 ran for 45 seconds!"));
-        return stopWatchHistoryList;
     }
 
     //draw the fragment (Create GUI of fragment)
@@ -52,7 +48,6 @@ public class StopWatchHistoryFragment extends Fragment {
         stopWatchHistoryAdapter = new StopWatchHistoryAdapter(stopWatchHistoryList, stopWatchHistoryContext);
         stopWatchHistoryRecyclerView.setAdapter(stopWatchHistoryAdapter); //now Adapter's activity starts
 
-
         return rootView;
     }
 
@@ -60,6 +55,13 @@ public class StopWatchHistoryFragment extends Fragment {
     public void onStart() { //onStart comes after onCreateView() callback
         super.onStart();
 
+        //fetch all StopWatch data from database
+        MySQLiteHelper mySQLiteHelper = new MySQLiteHelper(getActivity().getApplicationContext());
+        List<StopWatch> fetchedData = mySQLiteHelper.getAllStopWatch();
+        int i = 0;
+        for (StopWatch stopWatch : fetchedData) {
+            StopWatchHistoryFragment.stopWatchHistoryAdapter.insert(i, new StopWatchHistory(stopWatch.getTotalTime() + " for " + stopWatch.getUser()));
+        }
     }
 
     @Override

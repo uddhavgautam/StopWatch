@@ -5,10 +5,10 @@ package com.example.uddhav.stopwatch.Model.POJO;
  */
 
 public class StopWatch {
-    private long totalTime;
+    private String totalTime;
     private String user;
 
-    public StopWatch(long totalTime, String user) {
+    public StopWatch(String totalTime, String user) {
         this.totalTime = totalTime;
         this.user = user;
     }
@@ -24,11 +24,12 @@ public class StopWatch {
         this.user = user;
     }
 
-    public long getTotalTime() {
+    public String getTotalTime() {
         return totalTime;
     }
 
-    public void setTotalTime(long totalTime) {
+    public void setTotalTime(String totalTime) {
         this.totalTime = totalTime;
     }
+
 }

@@ -7,6 +7,9 @@ package com.example.uddhav.stopwatch.Model.POJO;
 public class StopWatchHistory {
     private String history;
 
+    public StopWatchHistory() {
+    }
+
     public StopWatchHistory(String history) {
         this.history = history;
     }

@@ -2,12 +2,12 @@ package com.example.uddhav.stopwatch.Controller.RecyclerViewAdapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.uddhav.stopwatch.Model.POJO.StopWatch;
 import com.example.uddhav.stopwatch.Model.POJO.StopWatchHistory;
 import com.example.uddhav.stopwatch.R;
 
@@ -19,8 +19,8 @@ import java.util.List;
  */
 
 public class StopWatchHistoryAdapter extends RecyclerView.Adapter<StopWatchHistoryAdapter.StopWatchHistoryViewHolder> {
-    private static final String TAG = "StopWatchAdapter";
-    List<StopWatchHistory> stopWatchHistoryList = Collections.emptyList(); //returns immutable empty list
+    private static final String TAG = "StopWatchHistoryAdapter";
+    public static List<StopWatchHistory> stopWatchHistoryList = Collections.emptyList(); //returns immutable empty list
     Context context;
 
     public StopWatchHistoryAdapter(List<StopWatchHistory> stopWatchHistoryList, Context stopWatchHistoryContext) {
@@ -40,9 +40,11 @@ public class StopWatchHistoryAdapter extends RecyclerView.Adapter<StopWatchHisto
 
     @Override
     public void onBindViewHolder(StopWatchHistoryViewHolder holder, int position) {
+        int lastValue = stopWatchHistoryList.size() - 1;
+        Log.i("history ", lastValue + "");
 
+        holder.geHistoryTextView().setText(stopWatchHistoryList.get(position).getHistory());
     }
-
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -73,7 +75,7 @@ public class StopWatchHistoryAdapter extends RecyclerView.Adapter<StopWatchHisto
     }
 
     // Remove a RecyclerView item containing a specified Data object
-    public void remove(StopWatch data) {
+    public void remove(StopWatchHistory data) {
         int position = stopWatchHistoryList.indexOf(data);
         stopWatchHistoryList.remove(position);
         notifyItemRemoved(position);
@@ -91,18 +93,18 @@ public class StopWatchHistoryAdapter extends RecyclerView.Adapter<StopWatchHisto
     }
 
     public static class StopWatchHistoryViewHolder extends RecyclerView.ViewHolder { //can be as separate class
-        public TextView historyTextView;
-        StopWatchHistoryAdapter stopWatchAdapter = new StopWatchHistoryAdapter();
+        public static TextView historyTextView;
 
         public StopWatchHistoryViewHolder(View v) {
             super(v);
-            historyTextView = v.findViewById(R.id.dataTextView);
+            historyTextView = v.findViewById(R.id.historyTextView);
 
         }
 
         public TextView geHistoryTextView() {
             return historyTextView;
         }
+
 
     }
 

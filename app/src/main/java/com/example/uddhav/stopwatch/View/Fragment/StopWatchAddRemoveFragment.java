@@ -16,7 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.uddhav.stopwatch.Controller.Utilities.MySQLiteHelper;
 import com.example.uddhav.stopwatch.Model.POJO.StopWatch;
+import com.example.uddhav.stopwatch.Model.POJO.StopWatchHistory;
 import com.example.uddhav.stopwatch.R;
 
 import static android.content.ContentValues.TAG;
@@ -24,12 +26,13 @@ import static android.content.ContentValues.TAG;
 public class StopWatchAddRemoveFragment extends Fragment implements View.OnClickListener {
 
     public static int addCount = 0, removeCount = 0;
-    public CountDownTimer countDownTimer;
-    private Button addBtn, removeBtn;
+    public static CountDownTimer countDownTimer;
+    public static long lastSavedTime;
+    private Button addBtn, removeBtn, toggleBtn;
     private Spinner spinner;
     private String mUserName; /* below TextWatcher makes user can't have null mUserName */
     private long totalTime = 0;
-    private StopWatch stopWatch = new StopWatch();
+    private StopWatch stopWatch;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,12 +51,17 @@ public class StopWatchAddRemoveFragment extends Fragment implements View.OnClick
         removeBtn = rootView.findViewById(R.id.removeBtnSWAR);
         spinner = rootView.findViewById(R.id.spinnerSWAR);
 
+
         //set up the click listener
 
         //Add button click creates new Instance of StopWatch. Every StopWatch is associated with the user
         // We should ask to input username on Add Button click.
         addBtn.setOnClickListener(this);
         addBtn.setOnClickListener(this);
+
+        removeBtn.setOnClickListener(this);
+        removeBtn.setOnClickListener(this);
+        removeBtn.setEnabled(false);
 
         return rootView;
     }
@@ -62,9 +70,23 @@ public class StopWatchAddRemoveFragment extends Fragment implements View.OnClick
     @Override
     public void onClick(View view) {
         if (view.getId() == addBtn.getId()) {
+            removeBtn.setEnabled(true);
             mUserName = promptUsername(); //prompt username from user and add it
         } else if (view.getId() == removeBtn.getId()) {
-//            StopWatchFragment.stopWatchAdapter.
+            //new database added. We have to reflect it in StopWatchHistoryFragment
+            StopWatchHistory stopWatchHistory;
+            StopWatchAddRemoveFragment.countDownTimer.cancel();
+            if (spinner.getSelectedItem().toString().matches("second")) {
+                stopWatchHistory = new StopWatchHistory(lastSavedTime + " seconds for " + mUserName);
+            } else {
+                stopWatchHistory = new StopWatchHistory(lastSavedTime + " milli-seconds for " + mUserName);
+            }
+            StopWatchHistoryFragment.stopWatchHistoryAdapter.insert(0, stopWatchHistory);
+            StopWatchFragment.stopWatchAdapter.remove();
+            removeBtn.setEnabled(false);
+            addBtn.setEnabled(true);
+            spinner.setEnabled(true);
+            addCount--;
         } else {
             //do nothing
         }
@@ -132,6 +154,9 @@ public class StopWatchAddRemoveFragment extends Fragment implements View.OnClick
 
         // show it
         alertDialog.show();
+        addBtn.setEnabled(false);
+        spinner.setEnabled(false);
+
         return mUserName;
 
     }
@@ -142,7 +167,8 @@ public class StopWatchAddRemoveFragment extends Fragment implements View.OnClick
         Log.i("time", totalTime + "");
         Log.i("size", totalTime + "");
 
-        StopWatchFragment.stopWatchAdapter.insert(size, new StopWatch(totalTime, mUserName)); //start always from zero, and inputted userName
+        stopWatch = new StopWatch(totalTime + "", mUserName);
+        StopWatchFragment.stopWatchAdapter.insert(size, stopWatch); //start always from zero, and inputted userName
 
 
         if (spinner.getSelectedItem().toString().matches("second")) {
@@ -152,6 +178,7 @@ public class StopWatchAddRemoveFragment extends Fragment implements View.OnClick
                     totalTime = l;
                     //just update time textview of row
                     long value = (1000000000 - totalTime) / 1000;
+                    lastSavedTime = value;
                     StopWatchFragment.stopWatchAdapter.doPartialUpdate(size, value);
                 }
 
@@ -167,6 +194,7 @@ public class StopWatchAddRemoveFragment extends Fragment implements View.OnClick
                     totalTime = l;
                     //just update time textview of row
                     long value = 1000000000 - totalTime;
+                    lastSavedTime = value;
                     StopWatchFragment.stopWatchAdapter.doPartialUpdate(size, value);
                 }
 
@@ -176,6 +204,25 @@ public class StopWatchAddRemoveFragment extends Fragment implements View.OnClick
                 }
             }.start();
         }
+
+
+        //save StopWatch instance in database
+        if (spinner.getSelectedItem().toString().matches("second")) {
+            stopWatch = new StopWatch(lastSavedTime + " seconds", mUserName); //updated StopWatch
+
+            //String: timeValue in second
+            MySQLiteHelper mySQLiteHelper = new MySQLiteHelper(getActivity().getApplicationContext());
+            mySQLiteHelper.addStopWatch(stopWatch);
+
+        } else {
+            //String: timeValue in milli-second
+
+            stopWatch = new StopWatch(lastSavedTime + " milli-seconds", mUserName); //updated StopWatch
+
+            MySQLiteHelper mySQLiteHelper = new MySQLiteHelper(getActivity().getApplicationContext());
+            mySQLiteHelper.addStopWatch(stopWatch);
+        }
+
         addCount++;
         return totalTime;
     }
