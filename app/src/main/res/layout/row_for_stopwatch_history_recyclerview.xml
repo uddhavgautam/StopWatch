@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="1dp"
-    android:background="?android:attr/textColorHighlightInverse"
+    android:backgroundTint="@color/listitemadded"
     android:orientation="horizontal"
     android:visibility="visible">
 
